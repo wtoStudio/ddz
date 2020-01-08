@@ -4,6 +4,9 @@ import personal.wt.ddz.ui.GamePanel;
 import personal.wt.ddz.ui.MainFrame;
 import javax.swing.*;
 
+/**
+ * @author ttb
+ */
 public class AppClient {
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
