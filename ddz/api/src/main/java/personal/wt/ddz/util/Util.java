@@ -7,7 +7,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * @author ttb
+ */
 public class Util {
+
+    private Util(){}
+
     public static Dimension getScreenSize(){
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         return toolkit.getScreenSize();
