@@ -1,12 +1,9 @@
 package personal.wt.ddz.ui;
 
-import org.springframework.beans.BeanUtils;
 import personal.wt.ddz.core.GameManager;
 import personal.wt.ddz.entity.Card;
 import personal.wt.ddz.entity.User;
-import personal.wt.ddz.enums.PictureType;
 import personal.wt.ddz.enums.Side;
-import personal.wt.ddz.enums.UserPosition;
 import personal.wt.ddz.util.Util;
 
 import javax.swing.*;
@@ -17,6 +14,8 @@ import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static personal.wt.ddz.config.DrawConfig.*;
+
 /**
  * @author ttb
  */
@@ -25,137 +24,56 @@ public class GamePanel extends JPanel {
     private GameManager gameManager = GameManager.getInstance();
 
     /**
-     * 游戏画面宽度
-     */
-    private int width;
-
-    /**
-     * 游戏画面高度
-     */
-    private int height;
-
-    /**
      * 游戏画面背景图
      */
     private Image bg;
 
-    /**
-     * 牌的宽度
-     */
-    private int cardWidth;
+    private User prevUser = new User("盖伦", Side.PREV);
 
-    /**
-     * 牌的高度
-     */
-    private int cardHeight;
+    private User localUser = new User("赵信", Side.LOCAL);
 
-    /**
-     * 容纳所有54张扑克牌的集合
-     */
-    private List<Card> allCardList = new ArrayList<>();
-
-    /**
-     * 本家的牌开始显示位置X坐标
-     */
-    private int myCardStartPosX;
-
-    /**
-     * 本家的牌开始显示位置Y坐标
-     */
-    private int myCardStartPosY;
-
-    /**
-     * 存放本家的牌
-     */
-    private List<Card> myCardList = new ArrayList<>();
-
-    /**
-     * 本家的牌的间隔宽度
-     */
-    private int myCardCap;
-
-    /**
-     * 本家打出的牌的间隔宽度
-     */
-    private int myPlayedCardCap;
-
-    /**
-     * 本家打出的牌开始显示位置Y坐标
-     */
-    private int myPlayedCardStartY;
-
-    /**
-     * 存放本家当前打出的牌
-     */
-    /*private List<Card> myPlayedCardList = new ArrayList<>();
-
-    *//**
-     * 存放上家的牌
-     *//*
-    private List<Card> prevCardList = new ArrayList<>();
-
-    *//**
-     * 存放下家的牌
-     *//*
-    private List<Card> nextCardList = new ArrayList<>();*/
-
-    private User prevUser = new User("盖伦", UserPosition.PREV);
-
-    private User localUser = new User("赵信", UserPosition.LOCAL);
-
-    private User nextUser = new User("雷克顿", UserPosition.NEXT);
+    private User nextUser = new User("雷克顿", Side.NEXT);
 
     /**
      * 存放底牌
      */
-    private List<Card> hiddenCardList = new ArrayList<>();
+    private List<Card> hiddenCardList = new ArrayList<>(3);
 
     /**
-     * 底牌开始显示位置X坐标
+     * 【重新发牌】按钮
      */
-    private int hiddenCardCap;
-
-    /**
-     * 底牌开始显示位置Y坐标
-     */
-    private int hiddenCardStartY;
-
-    //------------------------上下家牌位置参数START-------------------------
-
-    /**
-     * 牌距离两侧的宽度
-     */
-    private int sideCap;
-
-    /**
-     * 左侧开始位置X坐标
-     */
-    private int leftSideStartX;
-
-    /**
-     * 右侧开始位置X坐标
-     */
-    private int rightSideStartX;
-
-    /**
-     * 开始位置Y坐标
-     */
-    private int sideStartY;
-
-    /**
-     * 相邻两张牌的间距
-     */
-    private int sideCardCap;
-
-    //------------------------上下家牌位置参数END-------------------------
-
     private JButton redealCardBtn = new JButton("重新发牌");
 
     public GamePanel(){
         gameManager.dealCard(prevUser, localUser, nextUser, hiddenCardList);
-        initSize();
+        List<Card> prevPlayedCardList = prevUser.getPlayedCardList();
+        List<Card> allCardList = gameManager.getAllCardList();
+        prevPlayedCardList.add(allCardList.get(0));
+        prevPlayedCardList.add(allCardList.get(1));
+        prevPlayedCardList.add(allCardList.get(2));
+        prevPlayedCardList.add(allCardList.get(3));
+        prevPlayedCardList.add(allCardList.get(4));
+
+        List<Card> nextPlayedCardList = nextUser.getPlayedCardList();
+        nextPlayedCardList.add(allCardList.get(32));
+        nextPlayedCardList.add(allCardList.get(33));
+        nextPlayedCardList.add(allCardList.get(34));
+        nextPlayedCardList.add(allCardList.get(35));
+        nextPlayedCardList.add(allCardList.get(36));
+        nextPlayedCardList.add(allCardList.get(37));
+        nextPlayedCardList.add(allCardList.get(38));
+        nextPlayedCardList.add(allCardList.get(39));
+        nextPlayedCardList.add(allCardList.get(40));
+        nextPlayedCardList.add(allCardList.get(41));
+        nextPlayedCardList.add(allCardList.get(42));
+        nextPlayedCardList.add(allCardList.get(43));
+        nextPlayedCardList.add(allCardList.get(44));
+        nextPlayedCardList.add(allCardList.get(45));
+        nextPlayedCardList.add(allCardList.get(46));
+
+
         this.bg = Util.getImage("/images/background/bg2.jpg");
-        this.setPreferredSize(new Dimension(this.width, this.height));
+        this.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -196,37 +114,9 @@ public class GamePanel extends JPanel {
         });
     }
 
-    /**
-     * 初始化各种尺寸数值
-     */
-    private void initSize(){
-        this.width = (int) (Util.getScreenSize().width * 0.8);
-        this.height = (int) (this.width * 0.55);
-
-        this.cardWidth = this.width / 25;
-        this.cardHeight = (int) (this.cardWidth * 1.5);
-
-        this.hiddenCardCap = this.cardWidth + 30;
-        this.myCardCap = this.cardWidth / 2;
-        this.myPlayedCardCap = this.cardWidth / 2;
-
-        this.myCardStartPosY = this.height - (this.cardHeight + 30);
-        this.myPlayedCardStartY = this.myCardStartPosY - (this.cardHeight + 30);
-        this.hiddenCardStartY = 80;
-
-        //----上下家----
-        this.sideCap = 50;
-        this.leftSideStartX = this.sideCap;
-        this.rightSideStartX = this.width - (this.cardWidth + this.sideCap);
-        this.sideStartY = 80;
-        this.sideCardCap = this.cardHeight * 2 / 5;
-    }
-
     private int calStartX(int count, int cap){
-        return (this.width - ((count - 1) * cap + this.cardWidth)) / 2;
+        return (GAME_WIDTH - ((count - 1) * cap + CARD_WIDTH)) / 2;
     }
-
-
 
     /**
      * 根据鼠标点击位置，返回指定的牌的index
@@ -236,13 +126,13 @@ public class GamePanel extends JPanel {
         if(cardList.isEmpty()){
             return -1;
         }
-        this.myCardStartPosX = calStartX(cardList.size(), this.cardWidth/2);
+        int myCardStartPosX = calStartX(cardList.size(), CARD_WIDTH/2);
         int clickedX = point.x;
         int clickedY = point.y;
-        if(clickedX > this.myCardStartPosX &&
-            clickedX < (this.myCardStartPosX + (cardList.size()-1)*this.myCardCap+this.cardWidth)){
-            if(clickedY > this.myCardStartPosY && clickedY<this.myCardStartPosY +this.cardHeight){
-                int index = (clickedX - this.myCardStartPosX) / this.myCardCap;
+        if(clickedX > myCardStartPosX &&
+            clickedX < (myCardStartPosX + (cardList.size()-1)*LOCAL_CARD_CAP+CARD_WIDTH)){
+            if(clickedY > LOCAL_CARD_START_POS_Y && clickedY<LOCAL_CARD_START_POS_Y +CARD_HEIGHT){
+                int index = (clickedX - myCardStartPosX) / LOCAL_CARD_CAP;
                 return index;
             }
         }
@@ -255,23 +145,28 @@ public class GamePanel extends JPanel {
         //绘制背景图
         paintBackground(g);
         //绘制底牌
-        paintCards(this.hiddenCardList, this.hiddenCardCap, this.hiddenCardStartY, g);
+        paintCards(this.hiddenCardList, HIDDEN_CARD_CAP, HIDDEN_CARD_START_Y, g);
         //绘制本家的牌
-        paintCards(this.localUser.getCardList(), this.myCardCap, this.myCardStartPosY, g);
+        paintCards(this.localUser.getCardList(), LOCAL_CARD_CAP, LOCAL_CARD_START_POS_Y, g);
         //绘制本家已打出的牌
-        paintCards(this.localUser.getPlayedCardList(), this.myPlayedCardCap, this.myPlayedCardStartY, g);
+        paintCards(this.localUser.getPlayedCardList(), LOCAL_PLAYED_CARD_CAP, LOCAL_PLAYED_CARD_START_Y, g);
 
         //绘制上家的牌
-        paintSideCards(this.prevUser.getCardList(), this.sideCardCap, Side.PREV, g);
+        paintSideCards(this.prevUser.getCardList(), SIDE_CARD_CAP, Side.PREV, g);
         //绘制下家的牌
-        paintSideCards(this.nextUser.getCardList(), this.sideCardCap, Side.NEXT, g);
+        paintSideCards(this.nextUser.getCardList(), SIDE_CARD_CAP, Side.NEXT, g);
+
+        //绘制上家打出的牌
+        paintSidePlayedCards(this.prevUser.getPlayedCardList(), LOCAL_PLAYED_CARD_CAP, Side.PREV, g);
+        //绘制下家打出的牌
+        paintSidePlayedCards(this.nextUser.getPlayedCardList(), LOCAL_PLAYED_CARD_CAP, Side.NEXT, g);
     }
 
     /**
      * 绘制背景
      */
     private void paintBackground(Graphics g){
-        g.drawImage(bg, 0, 0, this.width, this.height, 0, 0, bg.getWidth(null), bg.getHeight(null), null);
+        g.drawImage(this.bg, 0, 0, GAME_WIDTH, GAME_HEIGHT, 0, 0, bg.getWidth(null), bg.getHeight(null), null);
     }
 
     /**
@@ -283,21 +178,42 @@ public class GamePanel extends JPanel {
      */
     private void paintSideCards(List<Card> cardList, int cap, Side side, Graphics g){
         int startX = 0;
-        int startY = this.sideStartY;
+        int startY = SIDE_START_Y;
         if(side == Side.PREV){
-            startX = this.leftSideStartX;
+            startX = PREV_SIDE_START_X;
         }else if(side == Side.NEXT){
-            startX = this.rightSideStartX;
+            startX = NEXT_SIDE_START_X;
         }
         for(int i=0; i<cardList.size(); i++){
             Card card = cardList.get(i);
             Image cardImage = card.getImage();
-            g.drawImage(cardImage, startX, startY + i * cap, startX + this.cardWidth, startY + i * cap + this.cardHeight, 0, 0, cardImage.getWidth(null), cardImage.getHeight(null), null);
+            g.drawImage(cardImage, startX, startY + i * cap, startX + CARD_WIDTH, startY + i * cap + CARD_HEIGHT, 0, 0, cardImage.getWidth(null), cardImage.getHeight(null), null);
         }
     }
 
     /**
-     * 绘制一组牌
+     * 绘制上家或下家已打出的牌
+     * @param cardList
+     * @param cap
+     * @param side
+     * @param g
+     */
+    private void paintSidePlayedCards(List<Card> cardList, int cap, Side side, Graphics g){
+        int startX = 0;
+        if(side == Side.PREV){
+            startX = SIDE_PLAYED_CARD_CAP;
+        }if(side == Side.NEXT){
+            startX = GAME_WIDTH - (SIDE_PLAYED_CARD_CAP + (cardList.size() - 1) * cap + CARD_WIDTH);
+        }
+        for(int i=0; i<cardList.size(); i++){
+            Card card = cardList.get(i);
+            Image cardImage = card.getImage();
+            g.drawImage(cardImage, startX + (i * cap), SIDE_PLAYED_CARD_START_Y, startX + (i * cap) + CARD_WIDTH, SIDE_PLAYED_CARD_START_Y + CARD_HEIGHT, 0, 0, cardImage.getWidth(null), cardImage.getHeight(null), null);
+        }
+    }
+
+    /**
+     * 沿水平方向绘制一组牌
      * @param cardList 要绘制的一组牌的集合
      * @param cap 相邻两张牌之间的间距
      * @param startY 开始位置y坐标
@@ -310,9 +226,9 @@ public class GamePanel extends JPanel {
             boolean selected = card.isSelected();
             Image cardImage = card.getImage();
             if(selected){
-                g.drawImage(cardImage, startX + (i * cap), startY - 30, startX + (i * cap) + this.cardWidth, startY - 30 + this.cardHeight, 0, 0, cardImage.getWidth(null), cardImage.getHeight(null), null);
+                g.drawImage(cardImage, startX + (i * cap), startY - 30, startX + (i * cap) + CARD_WIDTH, startY - 30 + CARD_HEIGHT, 0, 0, cardImage.getWidth(null), cardImage.getHeight(null), null);
             }else{
-                g.drawImage(cardImage, startX + (i * cap), startY, startX + (i * cap) + this.cardWidth, startY + this.cardHeight, 0, 0, cardImage.getWidth(null), cardImage.getHeight(null), null);
+                g.drawImage(cardImage, startX + (i * cap), startY, startX + (i * cap) + CARD_WIDTH, startY + CARD_HEIGHT, 0, 0, cardImage.getWidth(null), cardImage.getHeight(null), null);
             }
         }
     }

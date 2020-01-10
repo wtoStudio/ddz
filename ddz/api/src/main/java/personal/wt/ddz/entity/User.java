@@ -1,8 +1,7 @@
 package personal.wt.ddz.entity;
 
 import lombok.*;
-import personal.wt.ddz.enums.UserPosition;
-
+import personal.wt.ddz.enums.Side;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.*;
@@ -41,16 +40,21 @@ public class User {
     /**
      * 相对位置
      */
-    private UserPosition userPosition;
+    private Side side;
+
+    /**
+     * 根据index来确定相对位置
+     */
+    private int index;
 
     /**
      * 头像icon
      */
     private Image headerImage;
 
-    public User(String name, UserPosition userPosition){
+    public User(String name, Side side){
         this.id = UUID.randomUUID().toString().replace("-", "").toUpperCase().substring(0, 10);
         this.name = name;
-        this.userPosition = userPosition;
+        this.side = side;
     }
 }

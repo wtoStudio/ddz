@@ -1,12 +1,11 @@
 package personal.wt.ddz.core;
 
+import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 import personal.wt.ddz.entity.Card;
-import personal.wt.ddz.entity.DealCardResult;
 import personal.wt.ddz.entity.User;
 import personal.wt.ddz.enums.PictureType;
 import personal.wt.ddz.util.Util;
-
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -16,9 +15,13 @@ import java.util.List;
  */
 public class GameManager {
     /**
-     * 容纳所有54张扑克牌的集合
+     * 存放所有54张扑克牌的集合
      */
-    private static List<Card> allCardList = new ArrayList<>();
+    private static List<Card> allCardList = new ArrayList<>(54);
+
+    public static List<Card> getAllCardList() {
+        return allCardList;
+    }
 
     /**
      * 存放全部54张牌的图片
@@ -36,17 +39,17 @@ public class GameManager {
         initCardList();
     }
 
-    private static GameManager gameManager;
+    private static GameManager gameManager = new GameManager();
 
     private GameManager(){}
 
     public static GameManager getInstance(){
-        if(gameManager == null){
-            gameManager = new GameManager();
-        }
         return gameManager;
     }
 
+    /**
+     * 加载扑克牌图片
+     */
     private static void initImageMap(){
         PictureType[] pictureTypes = PictureType.values();
         String[] values = new String[]{"A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"};

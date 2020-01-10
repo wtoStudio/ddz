@@ -5,13 +5,14 @@ package personal.wt.ddz.enums;
  */
 
 public enum Side {
-    /**
-     * 上家
-     */
-    PREV,
+    LOCAL("LOCAL", "本家"), NEXT("NEXT", "下家"), PREV("PREV", "上家");
 
-    /**
-     * 下家
-     */
-    NEXT;
+    String code;
+
+    String desc;
+
+    Side (String code, String desc) {
+        this.code = code;
+        this.desc = desc;
+    }
 }
