@@ -47,7 +47,7 @@ public class GamePanel extends JPanel {
     public GamePanel(){
         gameManager.dealCard(prevUser, localUser, nextUser, hiddenCardList);
         List<Card> prevPlayedCardList = prevUser.getPlayedCardList();
-        List<Card> allCardList = gameManager.getAllCardList();
+        List<Card> allCardList = GameManager.getAllCardList();
         prevPlayedCardList.add(allCardList.get(0));
         prevPlayedCardList.add(allCardList.get(1));
         prevPlayedCardList.add(allCardList.get(2));
