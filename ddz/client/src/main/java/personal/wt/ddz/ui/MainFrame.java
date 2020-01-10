@@ -16,7 +16,7 @@ public class MainFrame extends JFrame {
     private GamePanel gamePanel = new GamePanel();
 
     public MainFrame(String title){
-        this.setLayout(new FlowLayout(0, 0, 0));
+        this.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.setTitle(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(gamePanel);
