@@ -28,11 +28,11 @@ public class GamePanel extends JPanel {
      */
     private Image bg;
 
-    private User prevUser = new User("盖伦", Util.loadImage("/images/headers/D003.png"), Side.PREV);
+    private User prevUser = new User("盖伦", Util.loadImage("/images/headers/farmer.png"), Side.PREV);
 
-    private User localUser = new User("赵信", Util.loadImage("/images/headers/D001.png"), Side.LOCAL);
+    private User localUser = new User("赵信", Util.loadImage("/images/headers/dz.png"), Side.LOCAL);
 
-    private User nextUser = new User("雷克顿", Util.loadImage("/images/headers/D004.png"), Side.NEXT);
+    private User nextUser = new User("雷克顿", Util.loadImage("/images/headers/farmer.png"), Side.NEXT);
 
     /**
      * 存放底牌
@@ -44,9 +44,14 @@ public class GamePanel extends JPanel {
      */
     private JButton redealCardBtn = new JButton("重新发牌");
 
-    public GamePanel(){
-        gameManager.dealCard(prevUser, localUser, nextUser, hiddenCardList);
+    /**
+     * 【准备】按钮
+     */
+    private JButton readyBtn = new JButton("准备");
 
+    public GamePanel(){
+        this.setLayout(null);
+        gameManager.dealCard(prevUser, localUser, nextUser, hiddenCardList);
         this.bg = Util.loadImage("/images/background/bg2.jpg");
         this.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
         this.addMouseListener(new MouseAdapter() {
@@ -76,8 +81,12 @@ public class GamePanel extends JPanel {
             }
         });
 
-        this.add(redealCardBtn);
+        readyBtn.setFocusPainted(false);
+        readyBtn.setBounds((GAME_WIDTH - 100)/2, LOCAL_CARD_START_POS_Y - 30 - 10, 100, 30);
+        this.add(readyBtn);
+
         redealCardBtn.setFocusPainted(false);
+        this.add(redealCardBtn);
         //重新发牌
         redealCardBtn.addActionListener(e -> {
             GamePanel.this.localUser.getCardList().clear();
@@ -141,6 +150,9 @@ public class GamePanel extends JPanel {
         paintSidePlayedCards(this.prevUser.getPlayedCardList(), LOCAL_PLAYED_CARD_CAP, Side.PREV, g);
         //绘制下家打出的牌
         paintSidePlayedCards(this.nextUser.getPlayedCardList(), LOCAL_PLAYED_CARD_CAP, Side.NEXT, g);
+
+        //绘制玩家名字和头像
+        paintUserInfo(g);
     }
 
     /**
@@ -148,6 +160,28 @@ public class GamePanel extends JPanel {
      */
     private void paintBackground(Graphics g){
         g.drawImage(this.bg, 0, 0, GAME_WIDTH, GAME_HEIGHT, 0, 0, bg.getWidth(null), bg.getHeight(null), null);
+    }
+
+    /**
+     * 绘制玩家信息
+     */
+    public void paintUserInfo(Graphics g){
+        int headerWidth = 48;
+        g.setColor(Color.WHITE);
+        //绘制本家信息
+        Image localUeaderImage = localUser.getHeaderImage();
+        g.drawString(localUser.getName(), SIDE_CAP + CARD_WIDTH + 160, GAME_HEIGHT - 30);
+        g.drawImage(localUeaderImage, SIDE_CAP + CARD_WIDTH + 160, GAME_HEIGHT - 30 - 70, SIDE_CAP + CARD_WIDTH + 160 + headerWidth, GAME_HEIGHT - 30 - 70 + headerWidth, 0, 0, localUeaderImage.getWidth(null), localUeaderImage.getHeight(null), null);
+
+        //绘制上家信息
+        Image prevUeaderImage = prevUser.getHeaderImage();
+        g.drawString(prevUser.getName(), SIDE_CAP + CARD_WIDTH + 100, 100);
+        g.drawImage(prevUeaderImage, SIDE_CAP + CARD_WIDTH + 100, 100 - 70, SIDE_CAP + CARD_WIDTH + 100 + headerWidth, 100 - 70 + headerWidth, 0, 0, prevUeaderImage.getWidth(null), prevUeaderImage.getHeight(null), null);
+
+        //绘制下家信息
+        Image nextUeaderImage = nextUser.getHeaderImage();
+        g.drawString(nextUser.getName(), GAME_WIDTH - (SIDE_CAP + CARD_WIDTH + 100), 100);
+        g.drawImage(nextUeaderImage, GAME_WIDTH - (SIDE_CAP + CARD_WIDTH + 100), 100 - 70, GAME_WIDTH - (SIDE_CAP + CARD_WIDTH + 100) + headerWidth, 100 - 70 + headerWidth, 0, 0, nextUeaderImage.getWidth(null), nextUeaderImage.getHeight(null), null);
     }
 
     /**

@@ -31,17 +31,30 @@ public class Util {
      * @return
      */
     public static Image loadImage(String path) {
-        @Cleanup
+        ImageIcon imageIcon = loadImageIcon(path);
+        if (imageIcon != null) {
+            return imageIcon.getImage();
+        }else{
+            throw new RuntimeException("加载资源文件【" + path + "】失败");
+        }
+    }
+
+    public static ImageIcon loadImageIcon(String path) {
         InputStream is = Util.class.getResourceAsStream(path);
         if(is == null){
             throw new RuntimeException("资源文件不存在【" + path + "】");
         }
         try {
             BufferedImage bufferedImage = ImageIO.read(is);
-            Image image = new ImageIcon(bufferedImage).getImage();
-            return image;
+            return new ImageIcon(bufferedImage);
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

@@ -73,6 +73,17 @@ public class DrawConfig {
     public final static int SIDE_PLAYED_CARD_START_Y;
     //----------------上下家的牌显示位置配置END----------------
 
+    //----------------用户名字和头像显示位置START----------------
+    /*public final static int LOCAL_USER_NAME_START_X;
+    public final static int LOCAL_USER_NAME_START_Y;
+
+    public final static int PREV_USER_NAME_START_X;
+    public final static int PREV_USER_NAME_START_Y;
+
+    public final static int NEXT_USER_NAME_START_X;
+    public final static int NEXT_USER_NAME_START_Y;*/
+    //----------------用户名字和头像显示位置END----------------
+
     static {
         //计算游戏画面的宽度和高度
         GAME_WIDTH = (int) (Util.getScreenSize().width * 0.8);
@@ -88,7 +99,7 @@ public class DrawConfig {
 
         //计算本家的牌的位置
         LOCAL_CARD_START_POS_Y = GAME_HEIGHT - (CARD_HEIGHT + 30);
-        LOCAL_PLAYED_CARD_START_Y = LOCAL_CARD_START_POS_Y - (CARD_HEIGHT + 30);
+        LOCAL_PLAYED_CARD_START_Y = LOCAL_CARD_START_POS_Y - (CARD_HEIGHT + 45);
         LOCAL_CARD_CAP = CARD_WIDTH / 2;
         LOCAL_PLAYED_CARD_CAP = CARD_WIDTH / 2;
 
@@ -99,6 +110,7 @@ public class DrawConfig {
         SIDE_START_Y = 80;
         SIDE_CARD_CAP = CARD_HEIGHT * 2 / 5;
 
+        //上下家打出的牌的开始位置与左侧（或右侧）的距离
         SIDE_PLAYED_CARD_CAP = SIDE_CAP + CARD_WIDTH + 50;
         SIDE_PLAYED_CARD_START_Y = HIDDEN_CARD_START_Y + CARD_HEIGHT + 50;
     }
