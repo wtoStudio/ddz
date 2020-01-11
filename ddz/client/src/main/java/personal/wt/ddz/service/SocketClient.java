@@ -1,5 +1,6 @@
 package personal.wt.ddz.service;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.Getter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -9,6 +10,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.*;
 
 /**
  * @author lenovo
@@ -34,7 +36,11 @@ public class SocketClient {
             e.printStackTrace();
         }
         if(finishConnect && socketChannel.isConnected()){
-            new Thread(() -> {
+            ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("demo-pool-%d").build();
+            ExecutorService pool = new ThreadPoolExecutor(5, 200,
+                    0L, TimeUnit.MILLISECONDS,
+                    new LinkedBlockingQueue<>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+            pool.submit(() -> {
                 while(true){
                     int select = 0;
                     try {
@@ -61,7 +67,7 @@ public class SocketClient {
                         }
                     }
                 }
-            }).start();
+            });
         }
     }
 
