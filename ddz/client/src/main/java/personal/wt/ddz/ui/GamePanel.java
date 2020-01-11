@@ -1,19 +1,22 @@
 package personal.wt.ddz.ui;
 
+import personal.wt.ddz.AppClient;
 import personal.wt.ddz.core.GameManager;
 import personal.wt.ddz.entity.Card;
+import personal.wt.ddz.entity.Message;
 import personal.wt.ddz.entity.User;
 import personal.wt.ddz.enums.Side;
+import personal.wt.ddz.service.GameService;
 import personal.wt.ddz.util.Util;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import static personal.wt.ddz.config.DrawConfig.*;
 
 /**
@@ -21,11 +24,10 @@ import static personal.wt.ddz.config.DrawConfig.*;
  */
 public class GamePanel extends JPanel {
 
+    private GameService gameService = new GameService();
+
     private GameManager gameManager = GameManager.getInstance();
 
-    /**
-     * 游戏画面背景图
-     */
     private Image bg;
 
     private User prevUser = new User("盖伦", Util.loadImage("/images/headers/farmer.png"), Side.PREV);
@@ -84,6 +86,10 @@ public class GamePanel extends JPanel {
         readyBtn.setFocusPainted(false);
         readyBtn.setBounds((GAME_WIDTH - 100)/2, LOCAL_CARD_START_POS_Y - 30 - 10, 100, 30);
         this.add(readyBtn);
+        readyBtn.addActionListener(e -> {
+            Message message = new Message("ABCD", "WXYZ", 502, "{'hello':'ready'}");
+            gameService.sendMsg(message);
+        });
 
         redealCardBtn.setFocusPainted(false);
         this.add(redealCardBtn);

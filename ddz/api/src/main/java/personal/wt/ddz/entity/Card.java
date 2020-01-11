@@ -5,13 +5,14 @@ import lombok.Setter;
 import personal.wt.ddz.enums.PictureType;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * @author ttb
  */
 @Setter
 @Getter
-public class Card {
+public class Card implements Serializable {
 
     private PictureType pictureType;
 

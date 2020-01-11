@@ -11,5 +11,11 @@
 
     <artifactId>server</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>personal.wt</groupId>
+            <artifactId>api</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

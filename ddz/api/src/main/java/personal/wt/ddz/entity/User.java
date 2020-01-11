@@ -2,6 +2,8 @@ package personal.wt.ddz.entity;
 
 import lombok.*;
 import personal.wt.ddz.enums.Side;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.*;
@@ -16,7 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"id"})
 @ToString
-public class User {
+public class User implements Serializable {
     /**
      * UUID的方式生成ID
      */
