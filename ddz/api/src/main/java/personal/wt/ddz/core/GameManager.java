@@ -1,6 +1,5 @@
 package personal.wt.ddz.core;
 
-import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 import personal.wt.ddz.entity.Card;
 import personal.wt.ddz.entity.User;
@@ -24,7 +23,7 @@ public class GameManager {
     }
 
     /**
-     * 存放全部54张牌的图片
+     * 存放所有用到的图片
      */
     private static Map<String, Image> imageMap = new HashMap<>(54);
 
@@ -48,7 +47,7 @@ public class GameManager {
     }
 
     /**
-     * 加载扑克牌图片
+     * 加载所有的图片
      */
     private static void initImageMap(){
         PictureType[] pictureTypes = PictureType.values();
@@ -59,11 +58,12 @@ public class GameManager {
             }
             for(String v : values){
                 String imageName = pictureType.getCode() + v;
-                imageMap.put(imageName, Util.getImage("/images/card/" + imageName + ".png"));
+                imageMap.put(imageName, Util.loadImage("/images/card/" + imageName + ".png"));
             }
         }
-        imageMap.put("JOKER0", Util.getImage("/images/card/JOKER0.png"));
-        imageMap.put("JOKER1", Util.getImage("/images/card/JOKER1.png"));
+        imageMap.put("JOKER0", Util.loadImage("/images/card/JOKER0.png"));
+        imageMap.put("JOKER1", Util.loadImage("/images/card/JOKER1.png"));
+        imageMap.put("gameBg", Util.loadImage("/images/background/bg2.jpg"));
     }
 
     private static void initCharValueMap(){

@@ -1,5 +1,7 @@
 package personal.wt.ddz.util;
 
+import lombok.Cleanup;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +25,13 @@ public class Util {
         return System.getProperty("user.dir");
     }
 
-    public static Image getImage(String path) {
+    /**
+     * 加载类路径下的图片资源
+     * @param path
+     * @return
+     */
+    public static Image loadImage(String path) {
+        @Cleanup
         InputStream is = Util.class.getResourceAsStream(path);
         if(is == null){
             throw new RuntimeException("资源文件不存在【" + path + "】");

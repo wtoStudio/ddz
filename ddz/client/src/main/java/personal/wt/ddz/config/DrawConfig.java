@@ -2,6 +2,9 @@ package personal.wt.ddz.config;
 
 import personal.wt.ddz.util.Util;
 
+/**
+ * @author lenovo
+ */
 public class DrawConfig {
     private DrawConfig(){}
 
@@ -36,24 +39,36 @@ public class DrawConfig {
     public final static int HIDDEN_CARD_START_Y;
 
     //----------------本家的牌显示位置配置START----------------
-    //本家的牌开始显示位置Y
+    /**
+     * 本家的牌开始显示位置Y
+     */
     public final static int LOCAL_CARD_START_POS_Y;
-    //本家打出的牌开始显示位置Y
+    /**
+     * 本家打出的牌开始显示位置Y
+     */
     public final static int LOCAL_PLAYED_CARD_START_Y;
-    //本家的牌，相邻两张的间距
+    /**
+     * 本家的牌，相邻两张的间距
+     */
     public final static int LOCAL_CARD_CAP;
-    //本家打出的牌，相邻两张的间距
+    /**
+     * 本家打出的牌，相邻两张的间距
+     */
     public final static int LOCAL_PLAYED_CARD_CAP;
     //----------------本家的牌显示位置配置END----------------
 
     //----------------上下家的牌显示位置配置START----------------
-    //上下家手里的牌与左侧（或右侧）的距离
+    /**
+     * 上下家手里的牌与左侧（或右侧）的距离
+     */
     public final static int SIDE_CAP;
     public final static int PREV_SIDE_START_X;
     public final static int NEXT_SIDE_START_X;
     public final static int SIDE_START_Y;
     public final static int SIDE_CARD_CAP;
-    //上下家打出的牌的开始位置与左侧（或右侧）的距离
+    /**
+     * 上下家打出的牌的开始位置与左侧（或右侧）的距离
+     */
     public final static int SIDE_PLAYED_CARD_CAP;
     public final static int SIDE_PLAYED_CARD_START_Y;
     //----------------上下家的牌显示位置配置END----------------

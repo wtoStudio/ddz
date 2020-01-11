@@ -52,9 +52,10 @@ public class User {
      */
     private Image headerImage;
 
-    public User(String name, Side side){
+    public User(String name, Image headerImage, Side side){
         this.id = UUID.randomUUID().toString().replace("-", "").toUpperCase().substring(0, 10);
         this.name = name;
+        this.headerImage = headerImage;
         this.side = side;
     }
 }

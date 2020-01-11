@@ -28,11 +28,11 @@ public class GamePanel extends JPanel {
      */
     private Image bg;
 
-    private User prevUser = new User("盖伦", Side.PREV);
+    private User prevUser = new User("盖伦", Util.loadImage("/images/headers/D003.png"), Side.PREV);
 
-    private User localUser = new User("赵信", Side.LOCAL);
+    private User localUser = new User("赵信", Util.loadImage("/images/headers/D001.png"), Side.LOCAL);
 
-    private User nextUser = new User("雷克顿", Side.NEXT);
+    private User nextUser = new User("雷克顿", Util.loadImage("/images/headers/D004.png"), Side.NEXT);
 
     /**
      * 存放底牌
@@ -46,33 +46,8 @@ public class GamePanel extends JPanel {
 
     public GamePanel(){
         gameManager.dealCard(prevUser, localUser, nextUser, hiddenCardList);
-        List<Card> prevPlayedCardList = prevUser.getPlayedCardList();
-        List<Card> allCardList = GameManager.getAllCardList();
-        prevPlayedCardList.add(allCardList.get(0));
-        prevPlayedCardList.add(allCardList.get(1));
-        prevPlayedCardList.add(allCardList.get(2));
-        prevPlayedCardList.add(allCardList.get(3));
-        prevPlayedCardList.add(allCardList.get(4));
 
-        List<Card> nextPlayedCardList = nextUser.getPlayedCardList();
-        nextPlayedCardList.add(allCardList.get(32));
-        nextPlayedCardList.add(allCardList.get(33));
-        nextPlayedCardList.add(allCardList.get(34));
-        nextPlayedCardList.add(allCardList.get(35));
-        nextPlayedCardList.add(allCardList.get(36));
-        nextPlayedCardList.add(allCardList.get(37));
-        nextPlayedCardList.add(allCardList.get(38));
-        nextPlayedCardList.add(allCardList.get(39));
-        nextPlayedCardList.add(allCardList.get(40));
-        nextPlayedCardList.add(allCardList.get(41));
-        nextPlayedCardList.add(allCardList.get(42));
-        nextPlayedCardList.add(allCardList.get(43));
-        nextPlayedCardList.add(allCardList.get(44));
-        nextPlayedCardList.add(allCardList.get(45));
-        nextPlayedCardList.add(allCardList.get(46));
-
-
-        this.bg = Util.getImage("/images/background/bg2.jpg");
+        this.bg = Util.loadImage("/images/background/bg2.jpg");
         this.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -114,6 +89,12 @@ public class GamePanel extends JPanel {
         });
     }
 
+    /**
+     * 沿水平方向绘制一组牌时，计算开始位置的X坐标
+     * @param count 牌的张数
+     * @param cap 相邻两张牌的间距
+     * @return
+     */
     private int calStartX(int count, int cap){
         return (GAME_WIDTH - ((count - 1) * cap + CARD_WIDTH)) / 2;
     }
