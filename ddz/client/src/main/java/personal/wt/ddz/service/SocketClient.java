@@ -90,25 +90,37 @@ public class SocketClient {
     }
 
     private void handleMsg(Message message){
+        GamePanel gamePanel = GamePanel.getInstance();
+        User localUser = gamePanel.getLocalUser();
+        User prevUser = gamePanel.getPrevUser();
+        User nextUser = gamePanel.getNextUser();
         if(message.getType() == MessageType.ALL_JOINED){
             String content = message.getContent();
             Map<String, JSONObject> map = JSONObject.parseObject(content, Map.class);
             System.out.println(map);
-            GamePanel gamePanel = GamePanel.getInstance();
             map.forEach((k, v) -> {
                 User user = v.toJavaObject(User.class);
                 //更新 gamePanel对象中 localUser, prevUser, nextUser属性的值
-                if(user.getIndex() < gamePanel.getLocalUser().getIndex()){
+                if(user.getIndex() < localUser.getIndex()){
                     gamePanel.setPrevUser(user);
-                }else if(user.getIndex() > gamePanel.getLocalUser().getIndex()){
+                }else if(user.getIndex() > localUser.getIndex()){
                     gamePanel.setNextUser(user);
-                }else if(user.getIndex() == gamePanel.getLocalUser().getIndex()){
+                }else if(user.getIndex() == localUser.getIndex()){
                     gamePanel.setLocalUser(user);
                 }
             });
             gamePanel.repaint();
         }else if(message.getType() == MessageType.READY){
 
+        }else if(message.getType() == MessageType.EXIT){
+            String content = message.getContent();
+            User user = JSONObject.parseObject(content, User.class);
+            if(user.getId().equals(prevUser.getId())){
+                gamePanel.setPrevUser(null);
+            }else if(user.getId().equals(nextUser.getId())){
+                gamePanel.setNextUser(null);
+            }
+            gamePanel.repaint();
         }
     }
 }

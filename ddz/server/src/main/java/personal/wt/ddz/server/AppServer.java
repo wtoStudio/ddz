@@ -143,12 +143,12 @@ public class AppServer {
         InetSocketAddress inetSocketAddress = (InetSocketAddress) socketAddress;
         String ip = inetSocketAddress.getAddress().getHostAddress();
         int port = inetSocketAddress.getPort();
-        users.forEach((k, v) -> {
-            if(v.getIp().equals(ip) && v.getPort() == port){
-                users.remove(k);
-                System.out.println("玩家【" + v.getName() + "】退出了房间");
+        users.forEach((userId, user) -> {
+            if(user.getIp().equals(ip) && user.getPort() == port){
+                users.remove(userId);
+                System.out.println("玩家【" + user.getName() + "】退出了房间");
                 //退出房间时， 给剩下的所有客户端发消息，告知有人退出了
-                String json = JSONObject.toJSONString(users);
+                String json = JSONObject.toJSONString(user);
                 Message message = Message.builder()
                         .type(MessageType.EXIT)
                         .content(json)
