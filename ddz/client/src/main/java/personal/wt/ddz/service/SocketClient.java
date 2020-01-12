@@ -6,6 +6,7 @@ import lombok.Getter;
 import personal.wt.ddz.entity.Message;
 import personal.wt.ddz.entity.User;
 import personal.wt.ddz.enums.MessageType;
+import personal.wt.ddz.enums.Side;
 import personal.wt.ddz.ui.GamePanel;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class SocketClient {
     private static SocketClient socketClient = new SocketClient();
     private SocketChannel socketChannel;
     private Selector selector;
-    private static final String SERVER_IP = "192.168.40.118";
+    private static final String SERVER_IP = "192.168.0.110";
     private static final int SERVER_PORT = 9305;
 
     private SocketClient() {
@@ -79,6 +80,7 @@ public class SocketClient {
                             Message message = JSONObject.parseObject(msgStr, Message.class);
                             handleMsg(message);
                         }
+                        it.remove();
                     }
                 }
             });
@@ -96,17 +98,34 @@ public class SocketClient {
         User nextUser = gamePanel.getNextUser();
         if(message.getType() == MessageType.ALL_JOINED){
             String content = message.getContent();
-            Map<String, JSONObject> map = JSONObject.parseObject(content, Map.class);
-            System.out.println(map);
+            Map<Integer, JSONObject> map = JSONObject.parseObject(content, Map.class);
+            getMyIndex(map, localUser);
+            int localUserIndex = localUser.getIndex();
+
+            //------only for testing
+            map.forEach((k, v) -> System.out.println(v.toJavaObject(User.class)));
+
             map.forEach((k, v) -> {
                 User user = v.toJavaObject(User.class);
                 //更新 gamePanel对象中 localUser, prevUser, nextUser属性的值
-                if(user.getIndex() < localUser.getIndex()){
-                    gamePanel.setPrevUser(user);
-                }else if(user.getIndex() > localUser.getIndex()){
-                    gamePanel.setNextUser(user);
-                }else if(user.getIndex() == localUser.getIndex()){
-                    gamePanel.setLocalUser(user);
+                if(localUserIndex == 1){
+                    if(user.getIndex() == 3){
+                        gamePanel.setPrevUser(user);
+                    }else if(user.getIndex() == 2){
+                        gamePanel.setNextUser(user);
+                    }
+                }else if(localUserIndex == 2){
+                    if(user.getIndex() == 1){
+                        gamePanel.setPrevUser(user);
+                    }else if(user.getIndex() == 3){
+                        gamePanel.setNextUser(user);
+                    }
+                }else if(localUserIndex == 3){
+                    if(user.getIndex() == 2){
+                        gamePanel.setPrevUser(user);
+                    }else if(user.getIndex() == 1){
+                        gamePanel.setNextUser(user);
+                    }
                 }
             });
             gamePanel.repaint();
@@ -122,5 +141,21 @@ public class SocketClient {
             }
             gamePanel.repaint();
         }
+    }
+
+    /**
+     * 获取当前玩家在服务端被分配到的位置
+     * @param map
+     * @return
+     */
+    private void getMyIndex(Map<Integer, JSONObject> map, User localUser){
+        map.forEach((index, userJson) -> {
+            User user = JSONObject.toJavaObject(userJson, User.class);
+            String ip = user.getIp();
+            int port = user.getPort();
+            if(localUser.getIp().equals(ip) && localUser.getPort() == port){
+                localUser.setIndex(index);
+            }
+        });
     }
 }

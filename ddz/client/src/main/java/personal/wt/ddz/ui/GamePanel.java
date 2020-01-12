@@ -63,10 +63,15 @@ public class GamePanel extends JPanel {
      */
     private JButton readyBtn = new JButton("准备");
 
+    /**
+     * only for testing
+     */
+    private JButton repaintBtn = new JButton("重绘");
+
     private GamePanel(){
         //gameManager.dealCard(prevUser, localUser, nextUser, hiddenCardList);
         faker = new Faker(Locale.CHINA);
-        this.localUser = new User(faker.name().name(), Side.LOCAL);
+        this.localUser = new User(faker.name().name());
         String clientIp = gameService.getClientIp();
         int clientPort = gameService.getClientPort();
         this.localUser.setIp(clientIp);
@@ -130,6 +135,10 @@ public class GamePanel extends JPanel {
             gameManager.dealCard(prevUser, localUser, nextUser, hiddenCardList);
             GamePanel.this.repaint();
         });
+
+        repaintBtn.setBounds((GAME_WIDTH - 100) / 2, 36, 100, 25);
+        this.add(repaintBtn);
+        repaintBtn.addActionListener(e -> GamePanel.this.repaint());
     }
 
     /**

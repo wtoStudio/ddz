@@ -3,11 +3,9 @@ package personal.wt.ddz.entity;
 import lombok.*;
 import personal.wt.ddz.enums.Side;
 import personal.wt.ddz.enums.UserStatus;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.*;
 import java.util.UUID;
 
 /**
@@ -18,7 +16,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"id"})
-@ToString
 @Builder
 public class User implements Serializable {
     /**
@@ -40,11 +37,6 @@ public class User implements Serializable {
      * 存放玩家已打出的牌
      */
     private List<Card> playedCardList = new ArrayList<>();
-
-    /**
-     * 相对位置
-     */
-    private Side side;
 
     /**
      * 玩家状态
@@ -71,13 +63,22 @@ public class User implements Serializable {
      */
     //private Image headerImage;
 
-    public User(String name, Side side){
+    public User(String name){
         //生成默认ID
         this.id = UUID.randomUUID().toString().replace("-", "").toUpperCase().substring(0, 10);
         this.name = name;
         //this.headerImage = headerImage;
-        this.side = side;
         //状态默认为【空闲】
         this.status = UserStatus.IDLE;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", index=" + index +
+                ", port=" + port +
+                '}';
     }
 }

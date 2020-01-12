@@ -21,14 +21,14 @@ import static personal.wt.ddz.core.GameManager.MAX_MESSAGE_LENGTH;
  * @author ttb
  */
 public class AppServer {
-    public static final String IP = "192.168.40.118";
+    public static final String IP = "192.168.0.110";
     public static final int PORT = 9305;
     public static ServerSocketChannel serverSocketChannel;
     public static Selector selector;
     /**
      * 仅考虑最简单的模型：最多三个玩家
      */
-    public static Map<String, User> users = new ConcurrentHashMap(3);
+    public static Map<Integer, User> users = new ConcurrentHashMap(3);
     public static volatile int index = 0;
     public static void main(String[] args) {
         try {
@@ -79,12 +79,12 @@ public class AppServer {
                         try {
                             remoteAddress = socketChannel.getRemoteAddress();
                             System.err.println("与【" + remoteAddress + "】的连接断开了");
+                            removeByIpAndPort(remoteAddress);
                             socketChannel.close();
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
                         selectionKey.cancel();
-                        removeByIpAndPort(remoteAddress);
                     }
                     String msgStr = new String(buffer.array(), 0, length);
                     if(!"".equals(msgStr)){
@@ -102,12 +102,21 @@ public class AppServer {
         if(message.getType() == MessageType.JOIN){
             String content = message.getContent();
             User user = JSONObject.parseObject(content, User.class);
-            user.setIndex(index++);
+            //user.setIndex(index++);
             if(users.size() >= 3){
                 return;
             }
             //把新加入的用户存放到users集合中
-            users.put(user.getId(), user);
+            if(users.get(1) == null){
+                user.setIndex(1);
+                users.put(1, user);
+            }else if(users.get(2) == null){
+                user.setIndex(2);
+                users.put(2, user);
+            }else if(users.get(3) == null){
+                user.setIndex(3);
+                users.put(3, user);
+            }
 
             //给其他客户端发送消息，通知有新用户加入了，使客户端能够更新自己的UI
             String json = JSONObject.toJSONString(users);
