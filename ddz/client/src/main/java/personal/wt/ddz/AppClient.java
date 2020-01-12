@@ -1,8 +1,10 @@
 package personal.wt.ddz;
 
+import com.github.javafaker.Faker;
 import personal.wt.ddz.ui.GamePanel;
 import personal.wt.ddz.ui.MainFrame;
 import javax.swing.*;
+import java.util.Locale;
 
 /**
  * @author ttb

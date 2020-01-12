@@ -12,9 +12,10 @@ import java.awt.*;
 @Getter
 public class MainFrame extends JFrame {
 
-    private GamePanel gamePanel = new GamePanel();
+    private GamePanel gamePanel;
 
     public MainFrame(String title){
+        gamePanel = GamePanel.getInstance();
         this.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.setTitle(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

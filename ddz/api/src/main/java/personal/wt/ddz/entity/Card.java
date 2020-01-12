@@ -1,7 +1,7 @@
 package personal.wt.ddz.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import personal.wt.ddz.core.GameManager;
 import personal.wt.ddz.enums.PictureType;
 
 import java.awt.*;
@@ -12,6 +12,9 @@ import java.io.Serializable;
  */
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Card implements Serializable {
 
     private PictureType pictureType;
@@ -20,15 +23,17 @@ public class Card implements Serializable {
 
     private boolean isSelected;
 
-    private Image image;
+    //private Image image;
 
     private int sortValue;
-
-    public Card(){}
 
     public Card(PictureType pictureType, String v){
         this.pictureType = pictureType;
         this.v = v;
+    }
+
+    public Image getImage(){
+        return GameManager.imageMap.get(this.pictureType.getCode() + this.v);
     }
 
     @Override
