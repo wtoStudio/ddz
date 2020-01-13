@@ -3,7 +3,7 @@ package personal.wt.ddz.config;
 import personal.wt.ddz.util.Util;
 
 /**
- * @author lenovo
+ * @author ttb
  */
 public class DrawConfig {
     private DrawConfig(){}

@@ -17,10 +17,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.*;
 import static personal.wt.ddz.core.GameManager.MAX_MESSAGE_LENGTH;
 
@@ -102,7 +99,7 @@ public class SocketClient {
             int localUserIndex = localUser.getIndex();
 
             //------only for testing
-            map.forEach((k, v) -> System.out.println(v.toJavaObject(User.class)));
+            map.forEach((k, v) -> System.out.println("-------\n" + v.toJavaObject(User.class) + "\n-------"));
 
             map.forEach((k, v) -> {
                 User user = v.toJavaObject(User.class);
@@ -172,15 +169,30 @@ public class SocketClient {
             gamePanel.setHiddenCardList(hiddenCardList);
 
             List<Card> localUserCardList = ((JSONArray)jsonObject.get(localUser.getIndex())).toJavaList(Card.class);
-            localUser.setCardList(localUserCardList);
+            //localUser.setCardList(localUserCardList);
 
             List<Card> prevUserCardList = ((JSONArray)jsonObject.get(prevUser.getIndex())).toJavaList(Card.class);
-            prevUser.setCardList(prevUserCardList);
+            //prevUser.setCardList(prevUserCardList);
 
             List<Card> nextUserCardList = ((JSONArray)jsonObject.get(nextUser.getIndex())).toJavaList(Card.class);
-            nextUser.setCardList(nextUserCardList);
+            //nextUser.setCardList(nextUserCardList);
 
-            gamePanel.repaint();
+            List<Card> temp1 = new ArrayList<>(localUserCardList.size());
+            List<Card> temp2 = new ArrayList<>(prevUserCardList.size());
+            List<Card> temp3 = new ArrayList<>(nextUserCardList.size());
+
+            for(int i = 0; i<localUserCardList.size(); i++){
+                temp1.add(localUserCardList.get(i));
+                temp2.add(prevUserCardList.get(i));
+                temp3.add(nextUserCardList.get(i));
+                localUser.setCardList(temp1);
+                prevUser.setCardList(temp2);
+                nextUser.setCardList(temp3);
+                gamePanel.repaint();
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {}
+            }
         }
     }
 
