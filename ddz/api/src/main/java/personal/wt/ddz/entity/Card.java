@@ -31,7 +31,6 @@ public class Card implements Serializable {
     }
 
     public String imageKey(){
-        System.out.println("imageKey = " + (this.pictureType.getCode() + this.v));
         return this.pictureType.getCode() + this.v;
     }
 
