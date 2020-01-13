@@ -162,6 +162,7 @@ public class SocketClient {
             }
             gamePanel.repaint();
         }else if(message.getType() == MessageType.DEAL_CARD){
+            gamePanel.getReadyBtn().setVisible(false);
             localUser.setStatus(UserStatus.PLAYING);
             prevUser.setStatus(UserStatus.PLAYING);
             nextUser.setStatus(UserStatus.PLAYING);

@@ -87,16 +87,13 @@ public class GameManager {
             }
             for(String v : values){
                 Card card = new Card(pictureType, v);
-                //card.setImage(imageMap.get(pictureType.getCode() + v));
                 card.setSortValue(charValueMap.get(v));
                 allCardList.add(card);
             }
         }
         Card joker0 = new Card(PictureType.JOKER0, "0");
-        //joker0.setImage(imageMap.get("JOKER0"));
         joker0.setSortValue(9000001);
         Card joker1 = new Card(PictureType.JOKER1, "1");
-        //joker1.setImage(imageMap.get("JOKER1"));
         joker1.setSortValue(9000002);
         allCardList.add(joker0);
         allCardList.add(joker1);
