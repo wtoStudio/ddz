@@ -95,7 +95,7 @@ public class SocketClient {
         if(message.getType() == MessageType.ALL_JOINED){
             String content = message.getContent();
             Map<Integer, JSONObject> map = JSONObject.parseObject(content, Map.class);
-            getMyIndex(map, localUser);
+            setMyIndex(map, localUser);
             int localUserIndex = localUser.getIndex();
 
             //------only for testing
@@ -201,7 +201,7 @@ public class SocketClient {
      * @param map
      * @return
      */
-    private void getMyIndex(Map<Integer, JSONObject> map, User localUser){
+    private void setMyIndex(Map<Integer, JSONObject> map, User localUser){
         map.forEach((index, userJson) -> {
             User user = JSONObject.toJavaObject(userJson, User.class);
             String ip = user.getIp();
