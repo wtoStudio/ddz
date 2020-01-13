@@ -23,8 +23,6 @@ public class Card implements Serializable {
 
     private boolean isSelected;
 
-    //private Image image;
-
     private int sortValue;
 
     public Card(PictureType pictureType, String v){
@@ -32,8 +30,9 @@ public class Card implements Serializable {
         this.v = v;
     }
 
-    public Image getImage(){
-        return GameManager.imageMap.get(this.pictureType.getCode() + this.v);
+    public String imageKey(){
+        System.out.println("imageKey = " + (this.pictureType.getCode() + this.v));
+        return this.pictureType.getCode() + this.v;
     }
 
     @Override

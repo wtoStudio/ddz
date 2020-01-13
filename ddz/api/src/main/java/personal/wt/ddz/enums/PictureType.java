@@ -12,8 +12,8 @@ public enum PictureType {
     FP("FP", "方片"),
     HT("HT", "黑桃"),
     MH("MH", "梅花"),
-    JOKER0("JOKER0", "小王"),
-    JOKER1("JOKER1", "大王");
+    JOKER0("JOKER", "小王"),
+    JOKER1("JOKER", "大王");
 
     String code;
 

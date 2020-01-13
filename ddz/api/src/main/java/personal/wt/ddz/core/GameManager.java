@@ -40,7 +40,7 @@ public class GameManager {
         initCardList();
     }
 
-    private static GameManager gameManager = new GameManager();
+    public static GameManager gameManager = new GameManager();
 
     private GameManager(){}
 

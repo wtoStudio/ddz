@@ -63,11 +63,6 @@ public class GamePanel extends JPanel {
      */
     private JButton readyBtn = new JButton("准备");
 
-    /**
-     * only for testing
-     */
-    private JButton repaintBtn = new JButton("重绘");
-
     private GamePanel(){
         //gameManager.dealCard(prevUser, localUser, nextUser, hiddenCardList);
         faker = new Faker(Locale.CHINA);
@@ -76,8 +71,7 @@ public class GamePanel extends JPanel {
         int clientPort = gameService.getClientPort();
         this.localUser.setIp(clientIp);
         this.localUser.setPort(clientPort);
-        Message message = Message.builder().from(this.localUser.getId())
-                .to("ALL")
+        Message message = Message.builder()
                 .type(MessageType.JOIN)
                 .content(JSONObject.toJSONString(this.localUser))
                 .build();
@@ -114,13 +108,18 @@ public class GamePanel extends JPanel {
         });
 
         readyBtn.setFocusPainted(false);
-        readyBtn.setBounds((GAME_WIDTH - 100)/2, LOCAL_CARD_START_POS_Y - 30 - 10, 100, 30);
+        readyBtn.setBounds((GAME_WIDTH - 120)/2, LOCAL_CARD_START_POS_Y - 30 - 10, 120, 30);
         this.add(readyBtn);
         readyBtn.addActionListener(e -> {
-            Message msg = Message.builder().from(this.localUser.getId())
-                    .to("ALL")
-                    .type(MessageType.READY)
+            JButton btn = (JButton) e.getSource();
+            Message msg = Message.builder()
+                    .content(gamePanel.localUser.getId())
                     .build();
+            if("准备".equals(btn.getText())){
+                msg.setType(MessageType.READY);
+            }else if("取消准备".equals(btn.getText())){
+                msg.setType(MessageType.UNREADY);
+            }
             gameService.sendMsg(msg);
         });
 
@@ -135,10 +134,6 @@ public class GamePanel extends JPanel {
             gameManager.dealCard(prevUser, localUser, nextUser, hiddenCardList);
             GamePanel.this.repaint();
         });
-
-        repaintBtn.setBounds((GAME_WIDTH - 100) / 2, 36, 100, 25);
-        this.add(repaintBtn);
-        repaintBtn.addActionListener(e -> GamePanel.this.repaint());
     }
 
     /**
@@ -280,7 +275,7 @@ public class GamePanel extends JPanel {
         }
         for(int i=0; i<cardList.size(); i++){
             Card card = cardList.get(i);
-            Image cardImage = card.getImage();
+            Image cardImage = GameManager.imageMap.get(card.imageKey());
             g.drawImage(cardImage, startX, startY + i * cap, startX + CARD_WIDTH, startY + i * cap + CARD_HEIGHT, 0, 0, cardImage.getWidth(null), cardImage.getHeight(null), null);
         }
     }
@@ -301,7 +296,7 @@ public class GamePanel extends JPanel {
         }
         for(int i=0; i<cardList.size(); i++){
             Card card = cardList.get(i);
-            Image cardImage = card.getImage();
+            Image cardImage = GameManager.imageMap.get(card.imageKey());
             g.drawImage(cardImage, startX + (i * cap), SIDE_PLAYED_CARD_START_Y, startX + (i * cap) + CARD_WIDTH, SIDE_PLAYED_CARD_START_Y + CARD_HEIGHT, 0, 0, cardImage.getWidth(null), cardImage.getHeight(null), null);
         }
     }
@@ -318,7 +313,7 @@ public class GamePanel extends JPanel {
         for(int i=0; i<cardList.size(); i++){
             Card card = cardList.get(i);
             boolean selected = card.isSelected();
-            Image cardImage = card.getImage();
+            Image cardImage = GameManager.imageMap.get(card.imageKey());
             if(selected){
                 g.drawImage(cardImage, startX + (i * cap), startY - 30, startX + (i * cap) + CARD_WIDTH, startY - 30 + CARD_HEIGHT, 0, 0, cardImage.getWidth(null), cardImage.getHeight(null), null);
             }else{

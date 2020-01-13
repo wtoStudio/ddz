@@ -1,30 +1,31 @@
 package personal.wt.ddz.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.Getter;
+import personal.wt.ddz.config.ServerConfig;
+import personal.wt.ddz.entity.Card;
 import personal.wt.ddz.entity.Message;
 import personal.wt.ddz.entity.User;
 import personal.wt.ddz.enums.MessageType;
-import personal.wt.ddz.enums.Side;
+import personal.wt.ddz.enums.UserStatus;
 import personal.wt.ddz.ui.GamePanel;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.*;
-
 import static personal.wt.ddz.core.GameManager.MAX_MESSAGE_LENGTH;
 
 /**
- * @author lenovo
+ * @author ttb
  */
 @Getter
 public class SocketClient {
@@ -32,8 +33,6 @@ public class SocketClient {
     private static SocketClient socketClient = new SocketClient();
     private SocketChannel socketChannel;
     private Selector selector;
-    private static final String SERVER_IP = "192.168.0.110";
-    private static final int SERVER_PORT = 9305;
 
     private SocketClient() {
         boolean finishConnect = false;
@@ -41,7 +40,7 @@ public class SocketClient {
         try {
             socketChannel = SocketChannel.open();
             socketChannel.configureBlocking(false);
-            socketChannel.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT));
+            socketChannel.connect(new InetSocketAddress(ServerConfig.IP, ServerConfig.PORT));
             selector = Selector.open();
             socketChannel.register(selector, SelectionKey.OP_READ);
             finishConnect = socketChannel.finishConnect();
@@ -129,8 +128,30 @@ public class SocketClient {
                 }
             });
             gamePanel.repaint();
-        }else if(message.getType() == MessageType.READY){
-
+        }else if(message.getType() == MessageType.READY_OK){
+            String content = message.getContent();
+            User user = JSONObject.parseObject(content, User.class);
+            if(user.getId().equals(localUser.getId())){
+                gamePanel.getReadyBtn().setText("取消准备");
+                localUser.setStatus(UserStatus.READY);
+            }else if(user.getId().equals(prevUser.getId())){
+                prevUser.setStatus(UserStatus.READY);
+            }else if(user.getId().equals(nextUser.getId())){
+                nextUser.setStatus(UserStatus.READY);
+            }
+            gamePanel.repaint();
+        }else if(message.getType() == MessageType.UNREADY_OK){
+            String content = message.getContent();
+            User user = JSONObject.parseObject(content, User.class);
+            if(user.getId().equals(localUser.getId())){
+                gamePanel.getReadyBtn().setText("准备");
+                localUser.setStatus(UserStatus.IDLE);
+            }else if(user.getId().equals(prevUser.getId())){
+                prevUser.setStatus(UserStatus.IDLE);
+            }else if(user.getId().equals(nextUser.getId())){
+                nextUser.setStatus(UserStatus.IDLE);
+            }
+            gamePanel.repaint();
         }else if(message.getType() == MessageType.EXIT){
             String content = message.getContent();
             User user = JSONObject.parseObject(content, User.class);
@@ -139,6 +160,25 @@ public class SocketClient {
             }else if(user.getId().equals(nextUser.getId())){
                 gamePanel.setNextUser(null);
             }
+            gamePanel.repaint();
+        }else if(message.getType() == MessageType.DEAL_CARD){
+            localUser.setStatus(UserStatus.PLAYING);
+            prevUser.setStatus(UserStatus.PLAYING);
+            nextUser.setStatus(UserStatus.PLAYING);
+            String content = message.getContent();
+            JSONObject jsonObject = JSONObject.parseObject(content);
+            List<Card> hiddenCardList = ((JSONArray)jsonObject.get(4)).toJavaList(Card.class);
+            gamePanel.setHiddenCardList(hiddenCardList);
+
+            List<Card> localUserCardList = ((JSONArray)jsonObject.get(localUser.getIndex())).toJavaList(Card.class);
+            localUser.setCardList(localUserCardList);
+
+            List<Card> prevUserCardList = ((JSONArray)jsonObject.get(prevUser.getIndex())).toJavaList(Card.class);
+            prevUser.setCardList(prevUserCardList);
+
+            List<Card> nextUserCardList = ((JSONArray)jsonObject.get(nextUser.getIndex())).toJavaList(Card.class);
+            nextUser.setCardList(nextUserCardList);
+
             gamePanel.repaint();
         }
     }

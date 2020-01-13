@@ -28,9 +28,24 @@ public enum MessageType {
     READY("READY", "准备"),
 
     /**
+     * 准备OK
+     */
+    READY_OK("READY_OK", "准备OK"),
+
+    /**
+     * 发牌，服务端随机分配牌，并把数据发往客户端
+     */
+    DEAL_CARD("DEAL_CARD", "发牌"),
+
+    /**
      * 取消准备
      */
-    UN_READY("UN_READY", "取消准备");
+    UNREADY("UNREADY", "取消准备"),
+
+    /**
+     * 取消准备OK
+     */
+    UNREADY_OK("UNREADY_OK", "取消准备OK");
 
     /**
      * code
