@@ -1,10 +1,7 @@
 package personal.wt.ddz.entity;
 
 import lombok.*;
-import personal.wt.ddz.core.GameManager;
 import personal.wt.ddz.enums.PictureType;
-
-import java.awt.*;
 import java.io.Serializable;
 
 /**
