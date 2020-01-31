@@ -215,11 +215,11 @@ public class AppServer extends Observable {
         throw new RuntimeException("服务端找不不到id=[" + userId + "]的玩家");
     }
 
-    public static AppServer getInstance(){
+    public static AppServer start(){
         return appServer;
     }
 
     public static void main(String[] args) {
-        AppServer.getInstance();
+        AppServer.start();
     }
 }

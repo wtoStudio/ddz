@@ -65,8 +65,8 @@ public class GamePanel extends JPanel {
 
     private GamePanel(){
         //gameManager.dealCard(prevUser, localUser, nextUser, hiddenCardList);
-        faker = new Faker(Locale.CHINA);
-        this.localUser = new User(faker.name().name());
+        //faker = new Faker(Locale.CHINA);
+        this.localUser = new User(Util.randomName());
         String clientIp = gameService.getClientIp();
         int clientPort = gameService.getClientPort();
         this.localUser.setIp(clientIp);
