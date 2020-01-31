@@ -1,7 +1,5 @@
 package personal.wt.ddz.util;
 
-import lombok.Cleanup;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
