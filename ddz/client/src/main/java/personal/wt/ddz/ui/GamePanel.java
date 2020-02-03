@@ -86,7 +86,7 @@ public class GamePanel extends JPanel {
                 List<Card> cardList = GamePanel.this.localUser.getCardList();
                 super.mouseClicked(e);
                 int button = e.getButton();//1: 鼠标左键  3：鼠标右键
-                if(button == MouseEvent.BUTTON1){ //选派（反选牌）
+                if(button == MouseEvent.BUTTON1){ //选牌（反选牌）
                     int index = getCardIndex(e.getPoint());
                     if(index > -1){
                         //调整计算误差
